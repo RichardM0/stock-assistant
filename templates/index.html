@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MeRich Stock Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+
+    <h1 class="dashboard-title">MeRich Stock Dashboard</h1>
+    <h4 class="dashboard-subtitle">Analyze a stock of your choice</h4>
+
+    <form method="POST" class="form-group">
+
+        <input
+            type="text"
+            name="ticker"
+            class="text-field"
+            placeholder="Ticker Symbol (e.g. AAPL)"
+            required
+        >
+
+        <!-- PERIOD -->
+        <h2 class="pref-title">Period</h2>
+        <div class="radio-group">
+            {% for p in ["1D","1W","1M","1Y","5Y","MAX","YTD"] %}
+                <label>
+                    <input type="radio" name="period" value="{{ p }}"
+                        {% if period == p %}checked{% endif %}>
+                    {{ p.upper() }}
+                </label>
+            {% endfor %}
+        </div>
+
+        <!-- INTERVAL -->
+         <h2 class="pref-title">Interval</h2>
+        <div class="radio-group">
+            {% for i in ["1D","1W","1M", "1Y"] %}
+                <label>
+                    <input type="radio" name="interval" value="{{ i }}"
+                        {% if interval == i %}checked{% endif %}>
+                    {{ i }}
+                </label>
+            {% endfor %}
+        </div>
+
+    </form>
+
+    {% if chart_html %}
+        <div class="card">
+            {{ chart_html | safe }}
+        </div>
+    {% endif %}
+
+</div>
+</body>
+</html>
