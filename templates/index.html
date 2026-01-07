@@ -10,53 +10,79 @@
 </head>
 
 <body>
-<div class="container">
+    <div class="container">
 
-    <h1 class="dashboard-title">MeRich Stock Dashboard</h1>
-    <h4 class="dashboard-subtitle">Analyze a stock of your choice</h4>
+        <h1 class="dashboard-title">MeRich Stock Dashboard</h1>
+        <h4 class="dashboard-subtitle">Analyze a stock of your choice</h4>
 
-    <form method="POST" class="form-group">
+        <form method="POST" class="form-group">
 
-        <input
-            type="text"
-            name="ticker"
-            class="text-field"
-            placeholder="Ticker Symbol (e.g. AAPL)"
-            required
-        >
+            <input
+                    type="text"
+                    name="ticker"
+                    class="text-field"
+                    placeholder="Ticker Symbol (e.g. AAPL)"
+                    value="{{ ticker or '' }}"
+                    required
+            >
 
-        <!-- PERIOD -->
-        <h2 class="pref-title">Period</h2>
-        <div class="radio-group">
-            {% for p in ["1D","1W","1M","1Y","5Y","MAX","YTD"] %}
-                <label>
-                    <input type="radio" name="period" value="{{ p }}"
-                        {% if period == p %}checked{% endif %}>
-                    {{ p.upper() }}
-                </label>
-            {% endfor %}
+            <!-- PERIOD -->
+            <h2 class="pref-title">Period</h2>
+            <div class="radio-group">
+                {% for p in ["1D","1W","1M","1Y","5Y","MAX","YTD"] %}
+                    <label>
+                        <input type="radio" name="period" value="{{ p }}"
+                            {% if period == p %}checked{% endif %}>
+                        {{ p.upper() }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <!-- INTERVAL -->
+            <h2 class="pref-title">Interval</h2>
+            <div class="radio-group">
+                {% for i in ["1D","1W","1M", "1Y"] %}
+                    <label>
+                        <input type="radio" name="interval" value="{{ i }}"
+                            {% if interval == i %}checked{% endif %}>
+                        {{ i }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <div class="button-container">
+                <button name="refresh" type="submit" class="refresh-btn">
+                    Refresh Chart
+                </button>
+            </div>
+
+        </form>
+
+        {% if chart_html %}
+            <div>
+                {{ chart_html | safe }}
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-12 card">
+                <h1>Stock Performances</h1>
+                {% if metrics %}
+                <div class="metrics">
+                    {% for i in metrics %}
+                        <div class="metric">
+                            <h4 class="metric-text">    
+                                <span class="metric-label">{{ i }}:</span>
+                                <span class="metric-value">{{ metrics[i] }}</span>
+                            </h4>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+            </div>
         </div>
 
-        <!-- INTERVAL -->
-         <h2 class="pref-title">Interval</h2>
-        <div class="radio-group">
-            {% for i in ["1D","1W","1M", "1Y"] %}
-                <label>
-                    <input type="radio" name="interval" value="{{ i }}"
-                        {% if interval == i %}checked{% endif %}>
-                    {{ i }}
-                </label>
-            {% endfor %}
-        </div>
-
-    </form>
-
-    {% if chart_html %}
-        <div class="card">
-            {{ chart_html | safe }}
-        </div>
-    {% endif %}
-
-</div>
+    </div>
 </body>
 </html>

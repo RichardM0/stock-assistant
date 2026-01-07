@@ -5,44 +5,56 @@ import plotly.graph_objects as go
 
 app = Flask(__name__)
 
+def format_large_number(value):
+    if value is None:
+        return "N/A"
+
+    abs_value = abs(value)
+
+    if abs_value >= 1e12:
+        return f"{value / 1e12:.2f}T"
+    elif abs_value >= 1e9:
+        return f"{value / 1e9:.2f}B"
+    elif abs_value >= 1e6:
+        return f"{value / 1e6:.2f}M"
+    elif abs_value >= 1e3:
+        return f"{value / 1e3:.2f}K"
+    else:
+        return f"{value:.2f}"
+
+
 @app.route("/", methods=["GET", "POST"])
 def home():
+    metrics = None
     ticker = None
     chart_html = None
     period = "1Y"
     interval = "1M"
+    period_map = {
+        "1D": "1d",
+        "1W": "1wk",
+        "1M": "1mo",
+        "1Y": "1y",
+        "5Y": "5y",
+        "MAX": "max",
+        "YTD": "ytd",
+    }
+    label_desc = {
+        "1D": "1 Day",
+        "1W": "1 Week",
+        "1M": "1 Month",
+        "1Y": "1 Year",
+        "5Y": "5 Years",
+        "MAX": "Max",
+        "YTD": "Year to Date",
+    }
+
     if request.method == "POST":
         ticker = request.form.get("ticker", "").upper()
         period = request.form.get("period", "1Y")
         interval = request.form.get("interval", "1M")
-        period_map = {
-            "1D": "1d",
-            "1W": "1wk",
-            "1M": "1mo",
-            "1Y": "1y",
-            "5Y": "5y",
-            "MAX": "max",
-            "YTD": "ytd",
-        }
 
-        label_desc = {
-            "1D": "1 Day",
-            "1W": "1 Week",
-            "1M": "1 Month",
-            "1Y": "1 Year",
-            "5Y": "5 Years",
-            "MAX": "Max",
-            "YTD": "Year to Date",
-        }
-
-        interval_map = {
-            "1D": "1d",
-            "1W": "1wk",
-            "1M": "1mo",
-            "1Y": "1y",
-        }
-
-        df = yf.download(ticker, period=period_map[period], interval=interval_map[interval])
+        df = yf.download(ticker, period=period_map[period], interval=period_map[interval])
         df.reset_index(inplace=True)
 
         if isinstance(df.columns, pd.MultiIndex):
@@ -61,7 +73,11 @@ def home():
         )
 
         fig.update_layout(
-            title=f"{ticker} — {label_desc[interval]} intervals over {label_desc[period]}",
+            title=dict(
+                text=f"<b>{ticker} -- {label_desc[interval]} over {label_desc[period]}</b>",
+                x=0.5,
+                xanchor="center"
+            ),
 
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
@@ -106,7 +122,14 @@ def home():
             config={"responsive": True}
         )
 
-    return render_template("index.html", chart_html=chart_html)
+        ticker_obj = yf.Ticker(ticker)
+
+        metrics={
+            "Current Price": f" {ticker_obj.fast_info.last_price:.2f}",
+            "Market Cap": f" {format_large_number(ticker_obj.info.get('marketCap'))}"
+        }
+
+    return render_template("index.html", period=period, interval=interval, ticker=ticker, chart_html=chart_html, metrics=metrics)
 
 if __name__ == "__main__":
     app.run(debug=True)

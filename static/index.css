@@ -71,20 +71,13 @@ body {
     box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.35);
 }
 
-/* CHART CARD */
 .card {
     width: 100%;
-    background: linear-gradient(
-        180deg,
-        rgba(30,41,59,0.85),
-        rgba(15,23,42,1)
-    );
     border-radius: 16px;
     padding: 24px;
     margin-top: 24px;
 }
 
-/* FORCE PLOTLY TO FILL WIDTH */
 .card > div {
     width: 100% !important;
 }
@@ -107,4 +100,35 @@ body {
 
 .radio-group input[type="radio"] {
     accent-color: var(--accent);
+}
+
+.metrics{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    column-gap:25px;
+    align-items:center;
+}
+
+.metric{
+    padding:4px 6px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+
+.metric-text {
+    display: flex;
+    gap: 8px;          
+    align-items: center;
+}
+
+.metric-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.metric-value {
+    font-weight: 700;
+    color: var(--text-primary);
 }
