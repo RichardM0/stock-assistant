@@ -6,16 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
+
 <body>
     <div class="container">
-        <div class="options-bar" style="margin-bottom: 20px;">
-            <a href="#" class="btn btn-primary active">Visualization</a>
-            <a href="#" class="btn btn-primary">Metrics</a>
-            <a href="#" class="btn btn-primary">Summary</a>
-        </div>
         <div class="row">
             <form method="POST" class="form-group">
                 <div class="col-md-4">
@@ -62,52 +59,57 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <h2 class="pref-title">Chart Type</h2>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="chart_type" value="candle"
-                                {% if chart_type == "candle" %}checked{% endif %}>
-                            Candlestick
-                        </label>
-
-                        <label>
-                            <input type="radio" name="chart_type" value="line"
-                                {% if chart_type == "line" %}checked{% endif %}>
-                            Line
-                        </label>
+                    <div class="options-bar" style="margin-bottom: 20px;">
+                        <a href="#" id="visual" class="btn btn-primary active">Visualization</a>
+                        <a href="#" id="metric" class="btn btn-primary">Metrics</a>
+                        <a href="#" id="summary" class="btn btn-primary">Summary</a>
                     </div>
+                    <div id="visual-section">
+                        <h2 class="pref-title">Chart Type</h2>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="chart_type" value="candle"
+                                    {% if chart_type == "candle" %}checked{% endif %}>
+                                Candlestick
+                            </label>
 
-                    {% if chart_html %}
-                    <div>
-                        {{ chart_html | safe }}
+                            <label>
+                                <input type="radio" name="chart_type" value="line"
+                                    {% if chart_type == "line" %}checked{% endif %}>
+                                Line
+                            </label>
+                        </div>
+
+                        {% if chart_html %}
+                        <div>
+                            {{ chart_html | safe }}
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
+                    <div id="metrics-section">
+                        <h1>Stock Performances</h1>
+                        {% if metrics %}
+                        <div class="metrics">
+                            {% for i in metrics %}
+                                <div class="metric">
+                                    <h4 class="metric-text">    
+                                        <span class="metric-label">{{ i }}:</span>
+                                        <span class="metric-value">{{ metrics[i] }}</span>
+                                    </h4>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div id="summary-section">
+                        <div class="ratings">
+                            <h1>{{ ticker }} </h1>
+                            <h1> Rating </h1>
+                            <h1> Buyer Consensus: {{buyer_consensus}} </h1>
+                        </div>
+                    </div>
                 </div>
             </form>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12 card">
-                <h1>Stock Performances</h1>
-                {% if metrics %}
-                <div class="metrics">
-                    {% for i in metrics %}
-                        <div class="metric">
-                            <h4 class="metric-text">    
-                                <span class="metric-label">{{ i }}:</span>
-                                <span class="metric-value">{{ metrics[i] }}</span>
-                            </h4>
-                        </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                
-            </div>
-        </div>
-            <div class="ratings">
-            <h1>{{ ticker }} </h1>
-            <h1> Rating </h1>
-            <h1> Buyer Consensus: {{buyer_consensus}} </h1>
         </div>
         <!-- Add below comparison to benchmark-->
 
