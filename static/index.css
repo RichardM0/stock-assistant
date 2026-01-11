@@ -30,7 +30,6 @@ body {
     color: var(--text-primary);
 }
 
-/* FULL WIDTH LAYOUT */
 .container {
     width: 100%;
     max-width: none;
@@ -50,9 +49,29 @@ body {
     margin-bottom: 24px;
 }
 
-/* INPUT */
+.intro-group{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:space-between;
+}
+
+@media screen and (max-width: 768px) {
+    .intro-group{
+        flex-direction:column;
+        justify-content:start;
+    }
+}
+
 .form-group {
     margin-bottom: 24px;
+}
+
+.ratings{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
 
 .text-field {
@@ -132,3 +151,14 @@ body {
     font-weight: 700;
     color: var(--text-primary);
 }
+
+.refresh-btn{
+    color: var(--text-primary);
+    background-color: var(--bg);
+    border: 1px var(--card) solid;
+    border-radius:8px;
+    margin-top:15px;
+    padding:6px 16px;
+
+}
+

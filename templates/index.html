@@ -11,58 +11,80 @@
 
 <body>
     <div class="container">
+        <div class="options-bar" style="margin-bottom: 20px;">
+            <a href="#" class="btn btn-primary active">Visualization</a>
+            <a href="#" class="btn btn-primary">Metrics</a>
+            <a href="#" class="btn btn-primary">Summary</a>
+        </div>
+        <div class="row">
+            <form method="POST" class="form-group">
+                <div class="col-md-4">
+                    <h1 class="dashboard-title">MeRich Stock Dashboard</h1>
+                    <h4 class="dashboard-subtitle">Analyze a stock of your choice</h4>
 
-        <h1 class="dashboard-title">MeRich Stock Dashboard</h1>
-        <h4 class="dashboard-subtitle">Analyze a stock of your choice</h4>
+                    <input
+                        type="text"
+                        name="ticker"
+                        class="text-field"
+                        placeholder="Ticker Symbol (e.g. AAPL)"
+                        value="{{ ticker or '' }}"
+                        required
+                    >
 
-        <form method="POST" class="form-group">
+                    <!-- PERIOD -->
+                    <h2 class="pref-title">Period</h2>
+                    <div class="radio-group">
+                        {% for p in ["1D","1W","1M","1Y","5Y","MAX","YTD"] %}
+                            <label>
+                                <input type="radio" name="period" value="{{ p }}"
+                                    {% if period == p %}checked{% endif %}>
+                                {{ p.upper() }}
+                            </label>
+                        {% endfor %}
+                    </div>
 
-            <input
-                    type="text"
-                    name="ticker"
-                    class="text-field"
-                    placeholder="Ticker Symbol (e.g. AAPL)"
-                    value="{{ ticker or '' }}"
-                    required
-            >
+                    <!-- INTERVAL -->
+                    <h2 class="pref-title">Interval</h2>
+                    <div class="radio-group">
+                        {% for i in ["1D","1W","1M", "1Y"] %}
+                            <label>
+                                <input type="radio" name="interval" value="{{ i }}"
+                                    {% if interval == i %}checked{% endif %}>
+                                {{ i }}
+                            </label>
+                        {% endfor %}
+                    </div>
 
-            <!-- PERIOD -->
-            <h2 class="pref-title">Period</h2>
-            <div class="radio-group">
-                {% for p in ["1D","1W","1M","1Y","5Y","MAX","YTD"] %}
-                    <label>
-                        <input type="radio" name="period" value="{{ p }}"
-                            {% if period == p %}checked{% endif %}>
-                        {{ p.upper() }}
-                    </label>
-                {% endfor %}
-            </div>
+                    <div class="button-container">
+                        <button name="refresh" type="submit" class="refresh-btn">
+                            Refresh Chart
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h2 class="pref-title">Chart Type</h2>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="chart_type" value="candle"
+                                {% if chart_type == "candle" %}checked{% endif %}>
+                            Candlestick
+                        </label>
 
-            <!-- INTERVAL -->
-            <h2 class="pref-title">Interval</h2>
-            <div class="radio-group">
-                {% for i in ["1D","1W","1M", "1Y"] %}
-                    <label>
-                        <input type="radio" name="interval" value="{{ i }}"
-                            {% if interval == i %}checked{% endif %}>
-                        {{ i }}
-                    </label>
-                {% endfor %}
-            </div>
+                        <label>
+                            <input type="radio" name="chart_type" value="line"
+                                {% if chart_type == "line" %}checked{% endif %}>
+                            Line
+                        </label>
+                    </div>
 
-            <div class="button-container">
-                <button name="refresh" type="submit" class="refresh-btn">
-                    Refresh Chart
-                </button>
-            </div>
-
-        </form>
-
-        {% if chart_html %}
-            <div>
-                {{ chart_html | safe }}
-            </div>
-        {% endif %}
+                    {% if chart_html %}
+                    <div>
+                        {{ chart_html | safe }}
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
 
         <div class="row">
             <div class="col-md-12 card">
@@ -82,6 +104,12 @@
                 
             </div>
         </div>
+            <div class="ratings">
+            <h1>{{ ticker }} </h1>
+            <h1> Rating </h1>
+            <h1> Buyer Consensus: {{buyer_consensus}} </h1>
+        </div>
+        <!-- Add below comparison to benchmark-->
 
     </div>
 </body>
