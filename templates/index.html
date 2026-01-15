@@ -18,6 +18,9 @@
                 <div class="col-md-4">
                     <h1 class="dashboard-title">MeRich Stock Dashboard</h1>
                     <h4 class="dashboard-subtitle">Analyze a stock of your choice</h4>
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
 
                     <input
                         type="text"
@@ -43,7 +46,7 @@
                     <!-- INTERVAL -->
                     <h2 class="pref-title">Interval</h2>
                     <div class="radio-group">
-                        {% for i in ["1D","1W","1M", "1Y"] %}
+                        {% for i in ["1D","1W","1M"] %}
                             <label>
                                 <input type="radio" name="interval" value="{{ i }}"
                                     {% if interval == i %}checked{% endif %}>
@@ -103,9 +106,9 @@
                     </div>
                     <div id="summary-section">
                         <div class="ratings">
-                            <h1>{{ ticker }} </h1>
-                            <h1> Rating </h1>
-                            <h1> Buyer Consensus: {{buyer_consensus}} </h1>
+                            <h1 class="rating-header">{{ ticker }} </h1>
+                            <h3 class="rating-labels"> Rating: <span class="rating-content">Dude</span>/10 </h3>
+                            <h3 class="rating-labels"> Buyer Consensus: <span class="rating-content">{{buyer_consensus}}</span> </h3>
                         </div>
                     </div>
                 </div>
