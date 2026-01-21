@@ -3,14 +3,11 @@ import yfinance as yf
 import pandas as pd
 
 from services.maps import label_desc, period_map
-from services.chart import generate_chart, generate_compare_chart
+from services.chart import generate_chart, generate_compare_chart, monte_carlo_chart
 from services.market_data import get_market_returns
-from utils.finance_utils import (
-    ticker_returns,
-    calculate_volatility,
-    get_buyer_consensus,
-    get_max_drawdown,
-)
+from services.simulation import get_cached_simulation
+from services.summary import monte_carlo_summary
+from utils.finance_utils import  ticker_returns, calculate_volatility, get_buyer_consensus, get_max_drawdown
 from utils.formatting import format_large_number
 
 app = Flask(__name__)
@@ -27,14 +24,19 @@ def home():
     chart_type = "line"
     compare_html = None
     error = None
+    mc_stats = ""
+    last_price = ""
 
     if request.method == "POST":
+        # storing inputs
         ticker = request.form.get("ticker", "").upper()
         compare_ticker = request.form.get("compare_ticker", "").upper()
         period = request.form.get("period", "1Y")
         interval = request.form.get("interval", "1M")
         chart_type = request.form.get("chart_type", "line")
+        days_ahead = int(request.form.get("days_ahead", 90))
 
+        # listing ticker information/data
         if ticker:
             df_main = yf.download(ticker, period=period_map[period], interval=period_map[interval])
 
@@ -80,6 +82,7 @@ def home():
             compare_html = compare_fig.to_html(full_html=False, config={"responsive": True})
 
 
+        # Metrics Section variables/data
         ticker_obj = yf.Ticker(ticker)
         ticker_info = ticker_obj.info
         ticker_fast = ticker_obj.fast_info
@@ -91,6 +94,10 @@ def home():
         div_yield = ticker_info.get("dividendYield")
         div_yield_str = f"{div_yield:.2f}" if div_yield else "N/A"
 
+        # Summary Section variables/data
+        price_paths = get_cached_simulation(ticker, days_ahead)
+        mc_stats = monte_carlo_summary(price_paths)
+        last_price = ticker_fast["lastPrice"] if ticker_fast["lastPrice"] else df_main["Close"].iloc[-1].item()
         try:
             market_cap = format_large_number(ticker_info.get("marketCap"))
         except:
@@ -125,7 +132,9 @@ def home():
         compare_html=compare_html,
         metrics=metrics,
         buyer_consensus=buyer_consensus,
-        error=error
+        error=error,
+        mc_stats=mc_stats,
+        last_price=f"{last_price:.2f}",
     )
 
 if __name__ == "__main__":

@@ -4,7 +4,6 @@ import pandas as pd
 from services.maps import label_desc
 
 def generate_compare_chart(df1, df2, ticker1, ticker2, interval, period):
-    # Normalize prices
     returns1 = df1["Close"].pct_change().dropna()
     returns2 = df2["Close"].pct_change().dropna()
     df1["percent"] = np.cumprod(1+returns1)-1
@@ -97,6 +96,29 @@ def generate_chart(chart_type, df, ticker, interval, period):
         xaxis_rangeslider_visible=False,
         autosize=True,
         showlegend=False
+    )
+
+    return fig
+
+def monte_carlo_chart(price_paths, ticker):
+    fig = go.Figure()
+
+    # Plot only first 100 paths (performance)
+    for i in range(min(100, price_paths.shape[1])):
+        fig.add_trace(go.Scatter(
+            y=price_paths[:, i],
+            mode="lines",
+            line=dict(width=1),
+            opacity=0.2,
+            showlegend=False
+        ))
+
+    fig.update_layout(
+        title=f"{ticker} — Monte Carlo Price Simulation",
+        xaxis_title="Days Ahead",
+        yaxis_title="Price",
+        template="plotly_dark",
+        height=450
     )
 
     return fig
