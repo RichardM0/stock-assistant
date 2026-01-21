@@ -166,12 +166,9 @@ body {
     width:100%;
 }
 
-#metrics-section{
+#metrics-section, #summary-section, #compare-section{
     display:none;
-}
-
-#summary-section{
-    display:none;
+    width:100%;
 }
 
 .ratings{

@@ -1,8 +1,6 @@
 import yfinance as yf
 import numpy as np
-from utils.cache import cache
 
-@cache.memoize(timeout=300)
 def ticker_returns(ticker, period):
     prices = yf.download(ticker, period=period, interval="1d")["Close"]
     return prices.pct_change().dropna()

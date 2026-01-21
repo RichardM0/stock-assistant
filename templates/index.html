@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 </head>
 
 
@@ -63,9 +63,10 @@
                 </div>
                 <div class="col-md-8">
                     <div class="options-bar" style="margin-bottom: 20px;">
-                        <a href="#" id="visual" class="btn btn-primary active">Visualization</a>
-                        <a href="#" id="metric" class="btn btn-primary">Metrics</a>
-                        <a href="#" id="summary" class="btn btn-primary">Summary</a>
+                        <a href="#" id="visual" class="btn btn-primary active" data-tab="visual">Visualization</a>
+                        <a href="#" id="metric" class="btn btn-primary" data-tab="metrics">Metrics</a>
+                        <a href="#" id="summary" class="btn btn-primary" data-tab="summary">Summary</a>
+                        <a href="#" id="compare" class="btn btn-primary" data-tab="compare">Compare</a>
                     </div>
                     <div id="visual-section">
                         <h2 class="pref-title">Chart Type</h2>
@@ -101,6 +102,20 @@
                                     </h4>
                                 </div>
                             {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div id="compare-section">
+                        <input
+                            type="text"
+                            name="compare_ticker"
+                            class="text-field"
+                            placeholder="Compare Ticker (e.g. AAPL)"
+                            value="{{ compare_ticker or '' }}"
+                        >
+                        {% if compare_html %}
+                        <div>
+                            {{ compare_html | safe }}
                         </div>
                         {% endif %}
                     </div>
