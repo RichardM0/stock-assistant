@@ -84,46 +84,46 @@ MeRich is a **Flask-based stock analysis web application** that allows users to 
    cd merich
    Setup & Installation
 
-2. Create and activate a virtual environment
+2. Create and activate a virtual environment:
 
-Linux / macOS
-```
-python -m venv venv
-source venv/bin/activate
-```
-
-Windows (Command Prompt)
-```
-python -m venv venv
-venv\Scripts\activate
-```
-
-Windows (PowerShell)
-```
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-```
-
-Install dependencies
-```
-pip install -r requirements.txt
-```
+    Linux / macOS
+    ```
+    python -m venv venv
+    source venv/bin/activate
+    ```
+  
+    Windows (Command Prompt)
+    ```
+    python -m venv venv
+    venv\Scripts\activate
+    ```
+    
+    Windows (PowerShell)
+    ```
+    python -m venv venv
+    .\venv\Scripts\Activate.ps1
+    ```
+    
+    Install dependencies
+    ```
+    pip install -r requirements.txt
+    ```
 
 3. Run the application
-```
-python app.py
-```
-
-## You should see:
-```
-Running on http://127.0.0.1:5000/
- (Press CTRL+C to quit)
-```
-
-## Open your browser and navigate to:
-```
-http://127.0.0.1:5000/
-```
+    ```
+    python app.py
+    ```
+    
+    ## You should see:
+    ```
+    Running on http://127.0.0.1:5000/
+     (Press CTRL+C to quit)
+    ```
+    
+    ## Open your browser and navigate to:
+    ```
+    http://127.0.0.1:5000/
+    ```
 
 ## You can now:
 
