@@ -122,8 +122,19 @@
                     <div id="summary-section">
                         <div class="ratings">
                             <h1 class="rating-header">{{ ticker }} </h1>
+                            <h3 class="rating-labels"> Current Price: <span class="rating-content">{{last_price}}</span></h3>
                             <h3 class="rating-labels"> Rating: <span class="rating-content">Dude</span>/10 </h3>
                             <h3 class="rating-labels"> Buyer Consensus: <span class="rating-content">{{buyer_consensus}}</span> </h3>
+                            {% if mc_stats %}
+                            <div class="mc-box">
+                                <h1 class="mc-header">Monte Carlo Projection (90 Days)</h1>
+                                <p>Note: This is NOT financial advice. This is purely based off of historical projection</p>
+                                <p class="mc-label">Expected Price: <span class="mc-content">{{ mc_stats.expected | round(2) }}</span></p>
+                                <p class="mc-label">90% Range: <span class="mc-content">{{ mc_stats.p5 | round(2) }} - {{ mc_stats.p95 | round(2) }}</span></p>
+                                <p class="mc-label">Probability Up:<span class="mc-content"> {{ mc_stats.prob_up | round(1) }}%</span></p>
+                                <p class="mc-label">Probability Up 5%: <span class="mc-content"> {{ mc_stats.prob_up5 | round(1) }}%</span></p>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
