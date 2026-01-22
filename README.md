@@ -32,12 +32,35 @@ MeRich is a **Flask-based stock analysis web application** that allows users to 
   - **90% confidence range**
   - **Probability of increase**
   - **Probability of increasing by over 5%**
+ 
+## Comparing Two Stocks
 
-### 5. Performance Optimizations
-- **Server-side caching** reduces redundant Yahoo Finance API calls.
-- Faster load times and reduced risk of API rate limits.
+MeRich allows you to compare **two stock tickers side by side**, providing insights into their historical performance, volatility, and key metrics.
 
-### 6. Clean Architecture
+### How to Use
+
+1. Enter the **first ticker** in the search bar.
+2. Enter the **second ticker** in the comparison field
+3. Click **Refresh Chart**.
+
+### Features
+
+- Side-by-side **cumulative returns comparison** on the interactive Plotly chart.
+- Compare similarity between each ticker
+  - Correlation
+  - Covariance
+- Quickly identify stronger or weaker performers over the selected period.
+
+### Benefits
+
+- Analyze relative performance before making investment decisions.
+- Make informed comparisons using both historical and projected data.
+
+### 6. Performance Optimizations
+- **Server-side caching** reduces redundant Monte-Carlo simulations
+- Reduced yFinance API calls by caching data
+
+### 7. Clean Architecture
 - `app.py`: Routing and orchestration.
 - `services/`: Data retrieval, chart generation, market benchmarks.
 - `utils/`: Financial calculations and formatting.
